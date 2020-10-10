@@ -28,12 +28,11 @@ app.get("/api/notes", function(req, res) {
 });
 
 app.post("/api/notes", function(req, res) {
-   
-      
-      let savednotes = fs.readFileSync("./Develop/db/db.json", "utf8");
+      let savednotes = fs.readFileSync("db/db.json", "utf8");
       savednotes = JSON.parse(savednotes);
       let newnote = req.body
-      newnote.id = savednotes.length;
+      newnote.id = savednotes.length+1;
+      newnote.id = JSON.stringify(newnote.id)
       savednotes.push(req.body); 
       console.log(savednotes)
 });
