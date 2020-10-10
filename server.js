@@ -29,15 +29,38 @@ app.get("/api/notes", function(req, res) {
 });
 
 app.post("/api/notes", function(req, res) {
-      let savednotes = fs.readFileSync("./db/db.json", "utf8");
+      let savednotes = fs.readFileSync("./db/db.json", "utf-8");
       savednotes = JSON.parse(savednotes);
       let newnote = req.body
-      newnote.id = savednotes.length+1;
+      newnote.id = Math.random();
       newnote.id = JSON.stringify(newnote.id)
       savednotes.push(newnote); 
-      fs.writeFileSync("./db/db.json", JSON.stringify(savednotes))
-      
+      fs.writeFileSync("./db/db.json", JSON.stringify(savednotes), function(err){
+          if (err) throw err
+      });
+      console.log("added new note:" + newnote)
+      res.json(savednotes)
 });
+
+app.delete("/api/notes/:id", function(req,res){
+    console.log("deleting")
+    let id=req.params.id;
+    let savednotes = fs.readFileSync("./db/db.json", "utf-8");
+    savednotes=JSON.parse(savednotes);
+    for (i=0; i<savednotes.length; i++){
+        if(savednotes[i].id === id){
+            savednotes.splice(i,1);
+            break;
+        }
+    }
+    console.log(savednotes)
+    fs.writeFileSync("./db/db.json",JSON.stringify(savednotes), function(err){
+        if (err) throw err
+    })
+    res.json(savednotes)
+
+}
+)
 
 app.listen(PORT, function() {
     console.log("App listening on PORT: " + PORT);
