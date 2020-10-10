@@ -2,6 +2,7 @@
 // =============================================================
 const express = require("express");
 const path = require("path");
+const fs = require("fs")
 
 // Sets up the Express App
 // =============================================================
@@ -12,7 +13,15 @@ var PORT = 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+//html routes
+app.get("/notes/", (req,res) => {
+    res.sendFile(path.join(__dirname, "notes.html"));
+});
+app.get("/", (req,res) => {
+    res.sendFile(path.join(__dirname, "index.html"));
+});
 
+//API ROUTES
 
 
 
