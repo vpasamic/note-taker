@@ -7,7 +7,7 @@ const fs = require("fs");
 // Sets up the Express App
 // =============================================================
 const app = express();
-var PORT = 3000;
+var PORT =process.env.PORT || 3000;
 
 // Sets up the Express app to handle data parsing
 app.use(express.static("db"));
@@ -24,10 +24,11 @@ app.get("/", (req,res) => {
 });
 
 //API ROUTES
+//get api route
 app.get("/api/notes", function(req, res) {
     res.sendFile(path.join(__dirname, "./db/db.json"));
 });
-
+//post api route
 app.post("/api/notes", function(req, res) {
       let savednotes = fs.readFileSync("./db/db.json", "utf-8");
       savednotes = JSON.parse(savednotes);
@@ -41,7 +42,7 @@ app.post("/api/notes", function(req, res) {
       console.log("added new note:" + newnote)
       res.json(savednotes)
 });
-
+//delete api route
 app.delete("/api/notes/:id", function(req,res){
     console.log("deleting")
     let id=req.params.id;
